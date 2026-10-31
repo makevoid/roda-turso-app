@@ -1,0 +1,62 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'socket'
+require 'rbconfig'
+
+Dir.chdir(File.expand_path('..', __dir__))
+api_port = Integer(ENV.fetch('API_PORT', '9292'))
+frontend_port = Integer(ENV.fetch('FRONTEND_PORT', '5173'))
+abort 'API_PORT and FRONTEND_PORT must be different.' if api_port == frontend_port
+[api_port, frontend_port].each do |port|
+  begin
+    TCPServer.new('127.0.0.1', port).close
+  rescue Errno::EADDRINUSE
+    abort "Port #{port} is already in use. Stop its existing server before running rake dev."
+  end
+end
+
+children = []
+stopping = false
+%w[INT TERM].each { |signal| Signal.trap(signal) { stopping = true } }
+
+begin
+  api_env = { 'APP_ORIGIN' => ENV.fetch('APP_ORIGIN', "http://127.0.0.1:#{frontend_port},http://localhost:#{frontend_port}") }
+  children << Process.spawn(api_env, 'bundle', 'exec', 'puma', '-C', 'config/puma.rb', pgroup: true)
+  children << Process.spawn('npm', 'run', 'dev', '--', '--port', frontend_port.to_s, chdir: 'frontend', pgroup: true)
+  puts "Daylight: http://127.0.0.1:#{frontend_port} | API: http://127.0.0.1:#{api_port}/api/health"
+  puts 'Press Ctrl-C to stop both servers.'
+  failed = false
+  until stopping
+    exited = children.find { |pid| Process.waitpid(pid, Process::WNOHANG) }
+    if exited
+      warn 'A development server exited; stopping both servers.'
+      failed = true
+      break
+    end
+    sleep 0.2
+  end
+ensure
+  children.each do |pid|
+    Process.kill('TERM', -pid)
+  rescue Errno::ESRCH
+    nil
+  end
+  deadline = Process.clock_gettime(Process::CLOCK_MONOTONIC) + 5
+  loop do
+    alive = children.select do |pid|
+      Process.kill(0, -pid)
+      true
+    rescue Errno::ESRCH
+      false
+    end
+    break if alive.empty?
+    if Process.clock_gettime(Process::CLOCK_MONOTONIC) >= deadline
+      alive.each { |pid| Process.kill('KILL', -pid) rescue Errno::ESRCH }
+      break
+    end
+    children.each { |pid| Process.waitpid(pid, Process::WNOHANG) rescue Errno::ECHILD }
+    sleep 0.1
+  end
+end
+exit(failed ? 1 : 0)

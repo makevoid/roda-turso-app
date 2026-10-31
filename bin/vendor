@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'fileutils'
+
+root = File.expand_path('..', __dir__)
+target = File.join(root, 'vendor/libsql-sequel')
+revision = '69189e07ccaeb4ebbedbc456ec94924a05a969ef'
+if File.directory?(target)
+  puts 'Using existing vendor/libsql-sequel (local changes preserved).'
+  exit
+end
+FileUtils.mkdir_p(File.dirname(target))
+abort 'Could not clone private adapter; check GitHub SSH access.' unless system('git', 'clone', 'git@github.com:makevoid/libsql-sequel.git', target)
+abort 'Could not check out adapter revision.' unless system('git', '-C', target, 'checkout', '--detach', revision)
+abort 'Could not apply hosted Turso patch.' unless system('git', '-C', target, 'apply', File.join(root, 'patches/libsql-sequel-turso.patch'))
+puts "Vendored libsql-sequel at #{revision} with the hosted Turso patch."
