@@ -2,6 +2,22 @@
 .env
 .env.*
 !.env.example
+# Local credentials and private keys (keep actual credentials outside this app).
+.turso*-token
+.secrets/
+secrets/
+credentials.json
+credentials-*.json
+service-account*.json
+.netrc
+.aws/
+.ssh/
+id_rsa
+id_ed25519
+*.pem
+*.key
+*.p12
+*.pfx
 .run/
 tmp/
 *.db
