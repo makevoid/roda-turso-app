@@ -2,9 +2,23 @@
 
 Environment: Apple Silicon macOS, Ruby 4.0.5, Bundler 4.0.20, Node 24.11.1, npm 11.19.1.
 
+## Published 0.3.1 update checks
+
+Updated `libsql-sequel` from 0.3.0 to 0.3.1 with
+`bundle update libsql-sequel --conservative`. The lockfile records the new
+release checksum; all other gem versions remain unchanged, including
+`turso_libsql = 0.2.0`.
+
+| Check | Result |
+| --- | --- |
+| `bundle exec rake test` | 14 tests, 99 assertions, no failures/errors/skips; includes adapter compatibility checks |
+| `bundle exec rake turso_test` | 2 hosted tests, 15 assertions, no failures/errors/skips; temporary tables removed and removal verified |
+
+The frontend build and manual browser checks were not repeated for this dependency update.
+
 ## Published 0.3.0 migration checks
 
-The app now pins `libsql-sequel = 0.3.0` from RubyGems. The RubyGems API
+This earlier migration pinned `libsql-sequel = 0.3.0` from RubyGems. The RubyGems API
 confirmed the author (Francesco Canessa), version, and SHA-256 recorded in the
 lockfile. Runtime inspection confirmed that all loaded adapter files come from
 the installed `libsql-sequel-0.3.0` gem, with none loaded from `vendor/`.

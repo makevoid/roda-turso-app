@@ -4,7 +4,7 @@ GEM
     bigdecimal (4.1.3)
     drb (2.2.3)
     ffi (1.17.4)
-    libsql-sequel (0.3.0)
+    libsql-sequel (0.3.1)
       sequel (>= 5.80, < 6)
       turso_libsql (= 0.2.0)
     minitest (6.0.6)
@@ -31,7 +31,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  libsql-sequel (= 0.3.0)
+  libsql-sequel (= 0.3.1)
   minitest (~> 6.0)
   puma (~> 8.0)
   rack-test (~> 2.0)
@@ -45,7 +45,7 @@ CHECKSUMS
   bundler (4.0.20) sha256=7978a8ac648767f5e635bc522445b79e80a52b907a39a36c2d8085ed6bc762ae
   drb (2.2.3) sha256=0b00d6fdb50995fe4a45dea13663493c841112e4068656854646f418fda13373
   ffi (1.17.4) sha256=bcd1642e06f0d16fc9e09ac6d49c3a7298b9789bcb58127302f934e437d60acf
-  libsql-sequel (0.3.0) sha256=25881cad8f9a47c3836b6f30ca172492b87f4f83bc87debd42b28195f4e632e3
+  libsql-sequel (0.3.1) sha256=c9a93226f3a75ba044d2a0664cdbee7109fbf22be220444e13027e2b98fd5696
   minitest (6.0.6) sha256=153ea36d1d987a62942382b61075745042a2b3123b1cd48f4c3675af9cc7d6f1
   nio4r (2.7.5) sha256=6c90168e48fb5f8e768419c93abb94ba2b892a1d0602cb06eef16d8b7df1dca1
   prism (1.9.0) sha256=7b530c6a9f92c24300014919c9dcbc055bf4cdf51ec30aed099b06cd6674ef85

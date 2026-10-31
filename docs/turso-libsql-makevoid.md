@@ -1,15 +1,15 @@
-# makevoid: Turso and libsql-sequel 0.3.0
+# makevoid: Turso and libsql-sequel 0.3.1
 
 ## Published dependency
 
-The app installs [libsql-sequel 0.3.0 from RubyGems](https://rubygems.org/gems/libsql-sequel/versions/0.3.0), authored by Francesco Canessa. Upstream is [makevoid/libsql-sequel](https://github.com/makevoid/libsql-sequel).
+The app installs [libsql-sequel 0.3.1 from RubyGems](https://rubygems.org/gems/libsql-sequel/versions/0.3.1), authored by Francesco Canessa. Upstream is [makevoid/libsql-sequel](https://github.com/makevoid/libsql-sequel).
 
 ```ruby
-gem 'libsql-sequel', '= 0.3.0'
+gem 'libsql-sequel', '= 0.3.1'
 ```
 
 `Gemfile.lock` records the RubyGems source and release SHA-256:
-`25881cad8f9a47c3836b6f30ca172492b87f4f83bc87debd42b28195f4e632e3`.
+`c9a93226f3a75ba044d2a0664cdbee7109fbf22be220444e13027e2b98fd5696`.
 The app no longer uses a Bundler path dependency, private clone, or local adapter patch. Existing ignored `vendor/libsql-sequel/` directories are left untouched but are not loaded by setup, runtime, or tests. The previous bootstrap script and patch have been removed.
 
 ## Database and credentials
