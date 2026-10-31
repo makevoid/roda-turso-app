@@ -1,0 +1,286 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #3d4839;
+  --color-line: #e9ece3;
+  --font-sans:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+@layer components {
+  :root {
+    font-family: var(--font-sans);
+    color: var(--color-ink);
+    background: #f9faf7;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+  button,
+  a,
+  input,
+  textarea,
+  select {
+    -webkit-tap-highlight-color: transparent;
+  }
+  button,
+  select {
+    cursor: pointer;
+  }
+  button {
+    transition:
+      background-color 0.15s,
+      color 0.15s,
+      opacity 0.15s;
+  }
+  button:disabled {
+    cursor: wait;
+  }
+  button:focus-visible,
+  a:focus-visible,
+  select:focus-visible {
+    outline: 2px solid #8da275;
+    outline-offset: 3px;
+  }
+  button:disabled {
+    opacity: 0.55;
+  }
+  input,
+  textarea {
+    border-radius: 0;
+  }
+  input[type="search"]::-webkit-search-cancel-button {
+    cursor: pointer;
+  }
+  .sidebar {
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    width: 244px;
+    flex-shrink: 0;
+    flex-direction: column;
+    border-right: 1px solid #e7ebdf;
+    padding: 32px 20px 24px;
+    background: #f7f8f3;
+    overflow-y: auto;
+  }
+  .brand-icon {
+    display: flex;
+    width: 38px;
+    height: 38px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 13px;
+    background: #40583a;
+    color: #e9efd9;
+  }
+  .brand-name {
+    font-size: 26px;
+    font-weight: 650;
+    letter-spacing: -0.07em;
+  }
+  .nav-item {
+    display: flex;
+    width: 100%;
+    min-height: 44px;
+    align-items: center;
+    gap: 12px;
+    border-radius: 10px;
+    padding: 0 14px;
+    font-size: 12px;
+    color: #8b9381;
+  }
+  .nav-item:hover {
+    background: #eff2e8;
+  }
+  .nav-item.selected {
+    background: #e9eedf;
+    color: #61764b;
+    font-weight: 600;
+  }
+  .nav-count {
+    min-width: 20px;
+    border-radius: 5px;
+    padding: 2px 5px;
+    font-size: 10px;
+  }
+  .selected .nav-count {
+    background: #dce5ce;
+  }
+  .primary-button {
+    display: flex;
+    min-height: 42px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid #72865e;
+    border-radius: 10px;
+    background: #7c9068;
+    padding: 10px 17px;
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+    box-shadow: 0 2px 2px #4155320a;
+  }
+  .primary-button:hover {
+    background: #6a8056;
+  }
+  .icon-button {
+    display: flex;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+  }
+  .icon-button:hover {
+    background: #f1f3eb;
+  }
+  .hero-title {
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 400;
+    color: #526544;
+  }
+  .garden {
+    position: absolute;
+    width: 34%;
+    min-width: 180px;
+    max-width: 310px;
+    height: auto;
+    right: 5%;
+    bottom: 20px;
+  }
+  .task-row {
+    display: flex;
+    min-height: 83px;
+    align-items: center;
+    gap: 5px;
+    padding: 0 12px 0 8px;
+    border-bottom: 1px solid #eff1eb;
+    transition: background-color 0.15s;
+  }
+  .task-row:last-child {
+    border-bottom: 0;
+  }
+  .task-row:hover {
+    background: #fcfdf9;
+  }
+  .task-row.is-complete {
+    background: #fdfefb;
+  }
+  .check-hit {
+    display: flex;
+    width: 44px;
+    min-width: 44px;
+    height: 48px;
+    align-items: center;
+    justify-content: center;
+  }
+  .task-checkbox {
+    display: flex;
+    width: 19px;
+    height: 19px;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid #d3dbc8;
+    border-radius: 6px;
+    background: #fff;
+    color: white;
+    transition: all 0.15s;
+  }
+  .check-hit:hover .task-checkbox {
+    border-color: #8ca378;
+    background: #eef3e5;
+  }
+  .task-checkbox.checked,
+  .check-hit:hover .task-checkbox.checked {
+    border-color: #8fa47a;
+    background: #8fa47a;
+  }
+  .task-dialog {
+    position: fixed;
+    inset: 0;
+    width: min(520px, calc(100% - 32px));
+    max-height: calc(100dvh - 40px);
+    margin: auto;
+    border: 1px solid #e8ecdf;
+    border-radius: 24px;
+    background: #fff;
+    color: var(--color-ink);
+    box-shadow: 0 25px 100px #23321c29;
+    overflow-y: auto;
+  }
+  .task-dialog::backdrop {
+    background: #26331e55;
+    backdrop-filter: blur(4px);
+  }
+  .field-label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .form-field {
+    width: 100%;
+    border: 1px solid #e0e5d9;
+    border-radius: 10px;
+    background: #fbfcf9;
+    padding: 11px 12px;
+    font-size: 14px;
+    outline: none;
+  }
+  .form-field:focus {
+    border-color: #93a77c;
+    box-shadow: 0 0 0 3px #edf2e4;
+  }
+  .eyebrow {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: #95a283;
+  }
+  .mobile-views {
+    scrollbar-width: none;
+  }
+  .mobile-views::-webkit-scrollbar {
+    display: none;
+  }
+  .mobile-bar {
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+  @media (max-width: 639px) {
+    .garden {
+      width: 45%;
+      min-width: 160px;
+      right: -20px;
+      bottom: 16px;
+      opacity: 0.85;
+    }
+    .hero-panel {
+      min-height: 250px;
+    }
+    .task-row {
+      padding-right: 5px;
+      padding-left: 3px;
+      gap: 0;
+    }
+    .task-row > .icon-button {
+      width: 38px;
+    }
+    .form-field {
+      font-size: 16px;
+    }
+    .primary-button {
+      min-height: 44px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation: none !important;
+      transition: none !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
