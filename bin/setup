@@ -1,9 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'rbconfig'
 Dir.chdir(File.expand_path('..', __dir__))
-abort 'Adapter setup failed.' unless system(RbConfig.ruby, 'bin/vendor')
 abort 'Ruby dependency installation failed.' unless system('bundle', 'install')
 abort 'Frontend dependency installation failed.' unless system('npm', '--prefix', 'frontend', 'ci')
 puts 'Ready. Run bundle exec rake dev.'

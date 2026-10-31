@@ -4,7 +4,6 @@
 
 - Ruby 3.3+; verified with Ruby 4.0.5 on Apple Silicon macOS.
 - Node.js 22.12+ (or Node 20.19+); verified with Node 24.11.1 and npm 11.19.1.
-- GitHub SSH access to `makevoid/libsql-sequel`, which is private.
 - A valid Turso database token in `~/.turso-db1-token` (plain token, with optional trailing newline).
 
 The pinned native driver ships Apple Silicon macOS and glibc Linux x86_64/aarch64 libraries. Other platforms need a separately reviewed native build.
@@ -15,7 +14,7 @@ The pinned native driver ships Apple Silicon macOS and glibc Linux x86_64/aarch6
 ./bin/setup
 ```
 
-Setup restores the ignored vendor directory before Bundler runs, installs the locked gems, and runs `npm ci` in `frontend/`. Existing vendor directories are preserved to avoid overwriting adapter work. The token is not copied into the project. Use `chmod 600 ~/.turso-db1-token` to keep it readable only by your user.
+Setup installs the locked gems from RubyGems and runs `npm ci` in `frontend/`. The adapter is pinned to published `libsql-sequel = 0.3.0`; setup requires neither GitHub SSH access nor a vendored adapter or patch. Existing ignored vendor directories are unused. The token is not copied into the project. Use `chmod 600 ~/.turso-db1-token` to keep it readable only by your user.
 
 ## Start both apps
 
@@ -61,7 +60,7 @@ bundle exec rake turso_test
 bundle exec rake build
 ```
 
-API tests use fresh in-memory libSQL databases and never read your token. The explicitly invoked `turso_test` task uses your hosted database, creates random `sequel_test_*` tables, and drops them in test teardown. It never clears your todo table.
+API tests use fresh in-memory libSQL databases; adapter compatibility tests also check a temporary file database, Turso URL support, and sensitive URL rejection. These local tests never read your token. `adapter_test` runs only those app-owned compatibility tests, not the upstream gem's full development suite (which is not packaged in the release). The explicitly invoked `turso_test` task reads credentials through the app's connection helper, creates random `sequel_test_*` tables in your hosted database, and drops them in test teardown. It never clears your todo table.
 
 The frontend has no automated test suite, as requested. Check it manually in a browser; see the verification record.
 
@@ -69,9 +68,9 @@ The frontend has no automated test suite, as requested. Check it manually in a b
 
 The lockfiles record the latest stable application gems and npm packages resolved on October 31, 2026. Notable versions: Roda 3.109.0, Sequel 5.109.0, Puma 8.0.2, Rack 3.2.8, Rack::Test 2.3.0, Minitest 6.0.6, Vite 8.3.5, React 19.3.1, Tailwind CSS 4.3.3, and Lucide React 1.66.0.
 
-`turso_libsql` intentionally remains at **0.2.0**, the private adapter's existing exact pin. Version 0.2.1 contains native credential debug logging. `minitest-mock` and `logger` are test dependencies required by the upstream adapter suite on Minitest 6 / Ruby 4.
+`libsql-sequel` is pinned to **0.3.0**, published by Francesco Canessa on RubyGems. Its checksum is recorded in `Gemfile.lock`. Its native dependency `turso_libsql` intentionally remains at **0.2.0**: the published adapter documents native credential debug logging in 0.2.1. The former `minitest-mock` and `logger` dependencies were only needed by the vendored upstream suite and are no longer required by these app tests.
 
-The indirect dependency `prism` resolves to 1.9.0 because the latest Minitest requires `prism ~> 1.5`; Prism 2.x is not compatible with that requirement. `bundle outdated --strict` reports the bundle up to date.
+The indirect dependency `prism` resolves to 1.9.0 because the locked Minitest requires `prism ~> 1.5`; Prism 2.x is not compatible with that requirement.
 
 ## Production build boundary
 

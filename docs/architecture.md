@@ -8,7 +8,7 @@ flowchart LR
   Vite -->|proxy| Roda[Roda / Puma :9292]
   Roda --> Todos[Todos validation + persistence]
   Todos --> Sequel[Sequel datasets]
-  Sequel --> Adapter[vendored libsql-sequel]
+  Sequel --> Adapter[libsql-sequel 0.3.0 from RubyGems]
   Adapter --> Native[turso_libsql 0.2.0]
   Native -->|HTTPS| Turso[db1-makevoid Turso database]
 ```

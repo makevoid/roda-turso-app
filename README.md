@@ -15,13 +15,13 @@ If the frontend port is occupied:
 FRONTEND_PORT=5174 bundle exec rake dev
 ```
 
-The default database is `turso://db1-makevoid.aws-eu-central-1.turso.io`; the API reads its token from `~/.turso-db1-token`. The browser never receives the token. The adapter lives in ignored `vendor/libsql-sequel/`; setup restores the pinned upstream version and applies the tracked Turso patch.
+The default database is `turso://db1-makevoid.aws-eu-central-1.turso.io`; the API reads its token from `~/.turso-db1-token`. The browser never receives the token. Bundler installs [libsql-sequel 0.3.0 from RubyGems](https://rubygems.org/gems/libsql-sequel/versions/0.3.0), with native Turso URL support. No private adapter checkout or local patch is required.
 
 Features: quick entry, task details and notes, completion/reopening, deletion, due dates, importance, Personal/Work/Life admin lists, search, sorting, and mobile layouts. No seed tasks are added automatically.
 
 ```sh
-bundle exec rake test          # Rack::Test API suite, isolated native memory DB
-bundle exec rake adapter_test  # vendored adapter regressions
+bundle exec rake test          # API + adapter checks, isolated memory/file DBs
+bundle exec rake adapter_test  # app compatibility with the published adapter
 bundle exec rake turso_test    # live Turso checks; temporary tables only
 bundle exec rake build         # Vite production build
 ```

@@ -2,7 +2,36 @@
 
 Environment: Apple Silicon macOS, Ruby 4.0.5, Bundler 4.0.20, Node 24.11.1, npm 11.19.1.
 
-## Automated checks
+## Published 0.3.0 migration checks
+
+The app now pins `libsql-sequel = 0.3.0` from RubyGems. The RubyGems API
+confirmed the author (Francesco Canessa), version, and SHA-256 recorded in the
+lockfile. Runtime inspection confirmed that all loaded adapter files come from
+the installed `libsql-sequel-0.3.0` gem, with none loaded from `vendor/`.
+
+| Check | Result |
+| --- | --- |
+| `./bin/setup` | Published Ruby dependencies and locked npm packages installed successfully |
+| `bundle exec rake test` | 14 tests, 99 assertions, no failures/errors/skips |
+| `bundle exec rake adapter_test` | 3 compatibility tests, 10 assertions, no failures/errors/skips; also included in `rake test` |
+| `bundle exec rake turso_test` | 2 hosted tests, 15 assertions, no failures/errors/skips |
+| `bundle exec rake build` | Successful Vite production build |
+| Gitleaks working-directory and all-local-ref scans | No leaks found; findings redacted |
+
+The local tests cover the existing API, published Turso scheme support, rejection
+of credentials in URLs, and task persistence across file-database connections.
+The opt-in hosted tests use the app's connection helper and real Turso token.
+They verify CRUD, bindings, Unicode, boolean/null values, unique constraints,
+`RETURNING`, transactions/savepoints, and reconnect persistence. Teardown dropped
+each randomly named test table and confirmed its removal. Existing todo data was
+not modified.
+
+The release does not package the upstream development tests. The old vendor-only
+test commands were replaced with app-owned checks, and the obsolete bootstrap
+and local patch were removed. Manual browser and server-lifecycle checks below
+are the earlier implementation record; they were not repeated for this change.
+
+## Original implementation checks (vendored adapter)
 
 | Check | Result |
 | --- | --- |

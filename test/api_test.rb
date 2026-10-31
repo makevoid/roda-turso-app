@@ -8,7 +8,7 @@ class ApiTest < Minitest::Test
   include Rack::Test::Methods
 
   def setup
-    # Same vendored adapter and migrations as hosted production; never touches Turso.
+    # Same published adapter and migrations as hosted production; never touches Turso.
     @db = Sequel.connect(adapter: :libsql)
     Daylight::Database.migrate(@db)
     @app = Daylight::App.build(db: @db).freeze.app
