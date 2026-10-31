@@ -1,0 +1,34 @@
+# Daylight
+
+A mobile-friendly todo app with a **Roda JSON API**, **Sequel + Turso**, and a separate **Vite / React / Tailwind CSS** frontend.
+
+```sh
+./bin/setup
+bundle exec rake dev
+```
+
+Open **http://127.0.0.1:5173**. Ctrl-C stops both servers. `rake dev` also works when Rake is available on your Ruby path.
+
+If the frontend port is occupied:
+
+```sh
+FRONTEND_PORT=5174 bundle exec rake dev
+```
+
+The default database is `turso://db1-makevoid.aws-eu-central-1.turso.io`; the API reads its token from `~/.turso-db1-token`. The browser never receives the token. The adapter lives in ignored `vendor/libsql-sequel/`; setup restores the pinned upstream version and applies the tracked Turso patch.
+
+Features: quick entry, task details and notes, completion/reopening, deletion, due dates, importance, Personal/Work/Life admin lists, search, sorting, and mobile layouts. No seed tasks are added automatically.
+
+```sh
+bundle exec rake test          # Rack::Test API suite, isolated native memory DB
+bundle exec rake adapter_test  # vendored adapter regressions
+bundle exec rake turso_test    # live Turso checks; temporary tables only
+bundle exec rake build         # Vite production build
+```
+
+- [Setup and development](docs/setup.md)
+- [Architecture and API](docs/architecture.md)
+- [makevoid's Turso / libsql-sequel integration](docs/turso-libsql-makevoid.md)
+- [Verification record](docs/verification.md)
+
+This is a single-user local app. Both servers bind to loopback; there is no login or per-user data isolation. Deploying publicly requires authentication and a same-origin reverse proxy for `/api`. Roda serves JSON only.

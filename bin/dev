@@ -45,9 +45,8 @@ ensure
   deadline = Process.clock_gettime(Process::CLOCK_MONOTONIC) + 5
   loop do
     alive = children.select do |pid|
-      Process.kill(0, -pid)
-      true
-    rescue Errno::ESRCH
+      Process.waitpid(pid, Process::WNOHANG).nil?
+    rescue Errno::ECHILD
       false
     end
     break if alive.empty?
@@ -55,7 +54,6 @@ ensure
       alive.each { |pid| Process.kill('KILL', -pid) rescue Errno::ESRCH }
       break
     end
-    children.each { |pid| Process.waitpid(pid, Process::WNOHANG) rescue Errno::ECHILD }
     sleep 0.1
   end
 end
